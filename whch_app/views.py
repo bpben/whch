@@ -22,7 +22,7 @@ host = 'localhost'
 pw = 'postgres'
 dbname = 'gdelt'
 db = create_engine('postgres://%s:%s@%s/%s'%(user,pw,host,dbname))
-con = None
+
 con = psycopg2.connect(database = dbname, user = user)
 
 #Read in pickled prediction models
@@ -81,9 +81,10 @@ def fancy_output():
      'isrootevent', 'eventcode', 'eventbasecode', 'eventrootcode', 'actor1geo_countrycode', 'actor2geo_countrycode',
      'actiongeo_countrycode']
     
-    new = {}
-    new['[0-9]type'] = request.args.get('groupid').upper()
-    newRows = format_input(new,features)
+    #new = {}
+    #new['[0-9]type'] = 
+    print request.args
+    newRows = format_input(db, request.args.get('name').upper(),features)
     
     preds = []
     targs = []
@@ -96,8 +97,6 @@ def fancy_output():
     sns_plot = barplot(targs,preds)
     sns_plot.figure.savefig(img, format='png')
 
-    #plt.plot(x,y)
-    #plt.savefig(img, format='png')
     img.seek(0)
 
     plot_url = base64.b64encode(img.getvalue())
