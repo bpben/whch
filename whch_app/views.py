@@ -1,5 +1,5 @@
 from flask import render_template
-from flaskexample import app
+from whch_app import app
 from flask import request
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
@@ -27,9 +27,13 @@ con = psycopg2.connect(database = dbname, user = user)
 
 #Read in pickled prediction models
 import cPickle
+from glob import glob
 targets = ['huf', 'fox', 'ap', 'reu', 'was']
-with open('/Users/B/gdelt/testing/fox_RandomForest_model.pkl','rb') as infile:
-    a = cPickle.load(infile)
+target_m = {}
+files = glob('/Users/B/gdelt/testing/*model.pkl')
+for f in files:
+    with open(f,'rb') as infile:
+        target_m[f.split('/')[-1].split('_')[0]] = cPickle.load(infile)
 
 @app.route('/')
 @app.route('/index')
@@ -81,11 +85,15 @@ def fancy_output():
     new['[0-9]type'] = request.args.get('groupid').upper()
     newRows = format_input(new,features)
     
-    img = StringIO.StringIO()
-    y = [1,2,3,4,5]
-    x = [0,2,1,3,4]
+    preds = []
+    targs = []
+    for t in target_m:
+        targs.append(t)
+        preds.append(np.mean(target_m[t].predict_proba(newRows)[:,1]))
     
-    sns_plot = barplot(np.mean(a.predict_proba(newRows)[:,1]))
+    img = StringIO.StringIO()
+    sns_plot = plt.figure()
+    sns_plot = barplot(targs,preds)
     sns_plot.figure.savefig(img, format='png')
 
     #plt.plot(x,y)
@@ -95,8 +103,6 @@ def fancy_output():
     plot_url = base64.b64encode(img.getvalue())
 
     return render_template('output.html', plot_url=plot_url)
-
-    #return render_template("output.html", predpng = predpng)
 
 '''
 @app.route('/output')

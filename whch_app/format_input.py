@@ -10,23 +10,32 @@ import itertools
 import cPickle
 import re
 import pandas as pd
+import itertools
 
 def format_input(new,features):
     #Read in sklearn encoder
     with open('/Users/B/gdelt/testing/sklearn_encoder.pkl','rb') as infile:
         encodes = cPickle.load(infile)
     outList = []
+    possible = []
     for k in encodes:
         codecols = [x for x in features if re.search(k,x)is not None]
         if k in new:
             if new[k] is not None:
-                out = {}
                 for i in codecols:
+                    out = {}
                     out[i] = encodes[k].transform(new[k])
-                    outList.append(copy(out))
-    for i in features:
-        for row in outList:
+                    possible.append(out)
+    
+    for comb in itertools.combinations(possible,3):
+        #print comb
+        row = {}
+        for c in comb:
+            print c
+            row.update(c)
+        for i in features:
             if i not in row:
+                #print i
                 row[i] = 0
+        outList.append(row)
     return(pd.DataFrame(outList))
-
