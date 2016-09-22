@@ -22,8 +22,8 @@ with open('postgres','rb') as f:
     login = []
     for line in f.readlines():
         print line
-        login.append(line)
-user,host,dbname = login
+        login.append(line.strip('\n'))
+user,host,pw,dbname = login
 #user = 'B' #add your username here (same as previous postgreSQL)                      
 #host = 'localhost'
 #pw = 'postgres'
