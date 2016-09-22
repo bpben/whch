@@ -17,10 +17,17 @@ import StringIO
 import base64
 from barplot import barplot
 
-user = 'B' #add your username here (same as previous postgreSQL)                      
-host = 'localhost'
-pw = 'postgres'
-dbname = 'gdelt'
+#Read in postgres
+with open('postgres','rb') as f:
+    login = []
+    for line in f.readlines():
+        print line
+        login.append(line)
+user,host,dbname = login
+#user = 'B' #add your username here (same as previous postgreSQL)                      
+#host = 'localhost'
+#pw = 'postgres'
+#dbname = 'gdelt'
 db = create_engine('postgres://%s:%s@%s/%s'%(user,pw,host,dbname))
 
 con = psycopg2.connect(database = dbname, user = user)
