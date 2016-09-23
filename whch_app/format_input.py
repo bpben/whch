@@ -14,10 +14,11 @@ import itertools
 
 def format_input(db,new,features):
     df = pd.read_sql('''
-                SELECT * FROM {} TABLESAMPLE SYSTEM (10)
+                SELECT * FROM {} 
                 where 
                 (actor1name like '{}' or actor2name like '{}'
-                )
+                order by random
+                limit 10)
                 '''.format('gd_eventsb',new,new),db)
     
     #Read in sklearn encoder
