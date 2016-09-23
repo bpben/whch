@@ -42,35 +42,10 @@ for f in files:
     with open(f,'rb') as infile:
         target_m[f.split('/')[-1].split('_')[0]] = cPickle.load(infile)
 
+
 @app.route('/')
-@app.route('/index')
-def index():
-    return render_template("index.html",
-       title = 'Home', user = { 'nickname': 'Miguel' },
-       )
-
-@app.route('/db')
-def tester():
-    sql_query = """
-		SELECT * FROM gd_events limit 10;                                                                       
-                """
-    query_results = pd.read_sql_query(sql_query,con)
-    item = ""
-    for i in range(0,10):
-        item += str(query_results.iloc[i])
-        item += "<br>"
-    return item
-
-@app.route('/db_fancy')
-def fancy():
-    sql_query = """
-               SELECT globaleventid, sourceurl, numarticles FROM gd_events limit 10;
-                """
-    query_results=pd.read_sql_query(sql_query,con)
-    rows = []
-    for i in range(0,query_results.shape[0]):
-        rows.append(dict(globaleventid=query_results.iloc[i]['globaleventid'], sourceurl=query_results.iloc[i]['sourceurl'], numarticles=query_results.iloc[i]['numarticles']))
-    return render_template('test.html',rows=rows)
+def test():
+    return render_template('index.html')
 
 @app.route('/input')
 def fancy_input():
@@ -109,22 +84,3 @@ def fancy_output():
     plot_url = base64.b64encode(img.getvalue())
 
     return render_template('output.html', plot_url=plot_url)
-
-'''
-@app.route('/output')
-def fancy_output():
-    #pull 'birth_month' from input field and store it
-    event = request.args.get('groupid').upper()
-    #just select the events that the user inputs
-    query = """
-               SELECT * FROM gd_events where actor1code = '%s' limit 100;
-                """ % event
-    print query
-    query_results=pd.read_sql_query(query,con)
-    print query_results
-    rows = []
-    for i in range(0,query_results.shape[0]):
-        rows.append(dict(actor=query_results.iloc[i]['actor1name'], sourceurl=query_results.iloc[i]['sourceurl'], group=query_results.iloc[i]['actor1code']))
-        the_result = ''
-    return render_template("output.html", rows = rows, the_result = the_result)
-'''

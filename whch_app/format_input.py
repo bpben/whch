@@ -17,7 +17,7 @@ def format_input(db,new,features):
                 SELECT * FROM {} 
                 where 
                 (actor1name like '{}' or actor2name like '{}'
-                order by random
+                order by random()
                 limit 10)
                 '''.format('gd_eventsb',new,new),db)
     
