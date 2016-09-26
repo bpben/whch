@@ -11,6 +11,7 @@ import cPickle
 import re
 import pandas as pd
 import itertools
+import os
 
 def format_input(db,new,features):
     df = pd.read_sql('''
@@ -22,7 +23,7 @@ def format_input(db,new,features):
                 '''.format('gd_eventsb',new,new),db)
     
     #Read in sklearn encoder
-    with open('sklearn_encoder.pkl','rb') as infile:
+    with open('whch_app/sklearn_encoder.pkl','rb') as infile:
         encodes = cPickle.load(infile)
     
     #Ensure all observations mention a country/type that's in the codebook
@@ -40,7 +41,6 @@ def format_input(db,new,features):
             col2code[i] = k
     
     #Encode variables
-    print "Encoding"
     remove = []
     for f in features:
         if df[f].dtype not in ('int64', 'float64'):

@@ -22,13 +22,8 @@ from barplot import barplot
 with open('postgres','rb') as f:
     login = []
     for line in f.readlines():
-        print line
         login.append(line.strip('\n'))
 user,host,pw,dbname = login
-#user = 'B' #add your username here (same as previous postgreSQL)                      
-#host = 'localhost'
-#pw = 'postgres'
-#dbname = 'gdelt'
 db = create_engine('postgres://%s:%s@%s/%s'%(user,pw,host,dbname))
 
 con = psycopg2.connect(database = dbname, user = user)
@@ -38,7 +33,7 @@ import cPickle
 from glob import glob
 targets = ['huf', 'fox', 'ap', 'reu', 'was']
 target_m = {}
-files = glob('*model.pkl')
+files = glob('whch_app/*model.pkl.gz')
 for f in files:
     with gzip.open(f,'rb') as infile:
         target_m[f.split('/')[-1].split('_')[0]] = cPickle.load(infile)
