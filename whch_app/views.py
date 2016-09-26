@@ -43,14 +43,6 @@ for f in files:
 def test():
     return render_template('index.html')
 
-@app.route('/input')
-def fancy_input():
-    query = """
-               SELECT * FROM gd_codebook;
-                """
-    choices = [x for x in pd.read_sql_query(query,con).values]
-    return render_template("input.html", buttons=choices)
-
 @app.route('/output')
 def fancy_output():
     features = ['actor1code', 'actor1countrycode', 'actor1knowngroupcode', 'actor1ethniccode', 'actor1religion1code', 'actor1religion2code',
