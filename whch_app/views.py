@@ -62,7 +62,7 @@ def fancy_output():
     
     preds = []
     targs = []
-    for f in files[0:1]:
+    for f in files:
         targs.append(targetsTrans[f.split('/')[-1].split('_')[0]])
         with gzip.open(f,'rb') as infile:
             target_m = cPickle.load(infile)
