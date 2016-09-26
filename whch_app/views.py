@@ -34,9 +34,9 @@ from glob import glob
 targets = ['huf', 'fox', 'ap', 'reu', 'was']
 target_m = {}
 files = glob('whch_app/*model.pkl.gz')
-for f in files:
-    with gzip.open(f,'rb') as infile:
-        target_m[f.split('/')[-1].split('_')[0]] = cPickle.load(infile)
+#for f in files:
+#    with gzip.open(f,'rb') as infile:
+#        target_m[f.split('/')[-1].split('_')[0]] = cPickle.load(infile)
 
 
 @app.route('/')
@@ -58,9 +58,11 @@ def fancy_output():
     
     preds = []
     targs = []
-    for t in target_m:
-        targs.append(t)
-        preds.append(np.mean(target_m[t].predict_proba(newRows)[:,1]))
+    for f in files:
+        targs.append(f.split('/')[-1].split('_')[0])
+        with gzip.open(f,'rb') as infile:
+            target_m = cPickle.load(infile)
+            preds.append(np.mean(target_m.predict_proba(newRows)[:,1]))
     
     img = StringIO.StringIO()
     sns_plot = plt.figure()
