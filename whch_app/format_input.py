@@ -22,7 +22,7 @@ def format_input(db,new,features):
                 '''.format('gd_eventsb',new,new),db)
     
     #Read in sklearn encoder
-    with open('/Users/B/gdelt/testing/sklearn_encoder.pkl','rb') as infile:
+    with open('sklearn_encoder.pkl','rb') as infile:
         encodes = cPickle.load(infile)
     
     #Ensure all observations mention a country/type that's in the codebook
