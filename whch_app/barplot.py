@@ -6,6 +6,8 @@ def barplot(targs,preds):
     import seaborn as sns
     
     sns.set_style("white")
-    
-    return(sns.barplot(y=targs,x=preds))
+    p = sns.barplot(y=targs,x=preds)
+    sns.despine(left=True, bottom=True, right=True)
+    p.set(xticklabels=[])
+    return(p)
 

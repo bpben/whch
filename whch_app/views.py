@@ -31,7 +31,11 @@ con = psycopg2.connect(database = dbname, user = user)
 #Read in pickled prediction models
 import cPickle
 from glob import glob
-targets = ['huf', 'fox', 'ap', 'reu', 'was']
+targetsTrans = {'huf':'HuffingtonPost', 
+                'fox':'FoxNews', 
+                'ap':'AssociatedPress', 
+                'reu':'Reuters', 
+                'was':'WashingtonPost'}
 target_m = {}
 files = glob('whch_app/*model.pkl.gz')
 #for f in files:
@@ -58,19 +62,19 @@ def fancy_output():
     
     preds = []
     targs = []
-    for f in files:
-        targs.append(f.split('/')[-1].split('_')[0])
+    for f in files[0:1]:
+        targs.append(targetsTrans[f.split('/')[-1].split('_')[0]])
         with gzip.open(f,'rb') as infile:
             target_m = cPickle.load(infile)
             preds.append(np.mean(target_m.predict_proba(newRows)[:,1]))
     
     img = StringIO.StringIO()
-    sns_plot = plt.figure()
+    sns_plot = plt.figure(tight_layout=True)
     sns_plot = barplot(targs,preds)
-    sns_plot.figure.savefig(img, format='png')
+    sns_plot.figure.savefig(img, format='png', transparent=True)
 
     img.seek(0)
 
     plot_url = base64.b64encode(img.getvalue())
 
-    return render_template('output.html', plot_url=plot_url)
+    return render_template('output.html', plot_url=plot_url, name=request.args.get('name'))
