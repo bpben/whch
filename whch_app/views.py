@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import psycopg2
 import tempfile
+import gzip
 
 #User parsing functions
 from format_input import format_input
@@ -37,9 +38,9 @@ import cPickle
 from glob import glob
 targets = ['huf', 'fox', 'ap', 'reu', 'was']
 target_m = {}
-files = glob('/Users/B/gdelt/testing/*model.pkl')
+files = glob('*model.pkl')
 for f in files:
-    with open(f,'rb') as infile:
+    with gzip.open(f,'rb') as infile:
         target_m[f.split('/')[-1].split('_')[0]] = cPickle.load(infile)
 
 
