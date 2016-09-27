@@ -81,7 +81,7 @@ def fancy_output():
     preds = []
     targs = []
     targs_c = []
-    for f in files[0:2]:
+    for f in files:
         targ = f.split('/')[-1].split('_')[0]
         targs.append(targetsTrans[targ])
         targs_c.append(targetsCol[targ])
