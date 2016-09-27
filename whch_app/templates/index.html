@@ -71,8 +71,11 @@
                 <p style="color:#F05F40;">Type a group, person or country you're interested in.  We'll tell you which networks are likely to cover your interests. </p>
                 <form  action="/output" method="GET">
                     <div class="form-group">
-                        <input type="text" id="name" name='name' placeholder="e.g. Hillary Clinton">
+                        <input style="color:#F05F40;" type="text" id="name" name='name' placeholder="e.g. Hillary Clinton">
                     </div>
+                    {% if error %}
+                    <p style="color:#F05F40;" class=error><strong>Error:</strong> {{ error }}
+                    {% endif %}
                     <div>
                         <button type="submit" class="btn btn-primary btn-xl page-scroll">Predict</button>
                     </div>

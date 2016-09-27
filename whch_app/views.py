@@ -60,9 +60,12 @@ def fancy_output():
     print request.args
     newRows = format_input(db, request.args.get('name').upper(),features)
     
+    if len(newRows)==0:
+        return render_template('index.html', error="No results found for {}, try searching something else".format(request.args.get('name')))
+    
     preds = []
     targs = []
-    for f in files:
+    for f in files[0:2]:
         targs.append(targetsTrans[f.split('/')[-1].split('_')[0]])
         with gzip.open(f,'rb') as infile:
             target_m = cPickle.load(infile)
