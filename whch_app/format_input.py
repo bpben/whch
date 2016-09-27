@@ -21,6 +21,22 @@ def format_input(db,new,features):
                 order by sqldate desc
                 limit 10
                 '''.format('gd_eventsb',new,new),db)
+    #If it finds nothing for actor, try location
+    if len(df)==0:
+        new = '%{}%'.format(new)
+        df = pd.read_sql('''
+                SELECT * FROM {} 
+                where 
+                (actor1geo_fullname like '%{}%' 
+                or 
+                actor2geo_fullname like '%{}%'
+                or
+                actiongeo_fullname like '%{}%')
+                order by sqldate desc
+                limit 10
+                '''.format('gd_eventsb',new,new,new),db)
+        if len(df)==0:
+            return(None)
     
     #Read in sklearn encoder
     with open('whch_app/sklearn_encoder.pkl','rb') as infile:

@@ -60,7 +60,7 @@ def fancy_output():
     print request.args
     newRows = format_input(db, request.args.get('name').upper(),features)
     
-    if len(newRows)==0:
+    if newRows is None:
         return render_template('index.html', error="No results found for {}, try searching something else".format(request.args.get('name')))
     
     preds = []
