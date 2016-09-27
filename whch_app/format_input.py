@@ -19,7 +19,6 @@ def format_input(db,new,features):
                 where 
                 (actor1name like '{}' or actor2name like '{}')
                 order by sqldate desc
-                limit 10
                 '''.format('gd_eventsb',new,new),db)
     #If it finds nothing for actor, try location
     if len(df)==0:
@@ -33,10 +32,21 @@ def format_input(db,new,features):
                 or
                 actiongeo_fullname like '%{}%')
                 order by sqldate desc
-                limit 10
                 '''.format('gd_eventsb',new,new,new),db)
         if len(df)==0:
             return(None)
+    
+    df.globaleventid = df.globaleventid.astype('int64')
+    eventids = tuple(str(x) for x in df.globaleventid.values)
+    
+    #Get mentions data
+    df_m = pd.read_sql("""
+                select * from {} 
+                where globaleventid in {}
+                """.format('gd_mentionsb',eventids),db)
+ 
+    #Merge events(date) to mentions
+    df_m = df[['sqldate','globaleventid']].set_index('globaleventid').join(df_m.set_index('globaleventid'), how='right')
     
     #Read in sklearn encoder
     with open('whch_app/sklearn_encoder.pkl','rb') as infile:
@@ -69,5 +79,6 @@ def format_input(db,new,features):
                     df[f] = 0
             else:
                 df[f] = df[f].astype('float64')
-                
-    return(df[features])
+    
+    #predict,visual sets            
+    return(df[features].iloc[0:10],df_m)

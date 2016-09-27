@@ -61,6 +61,28 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
+    
+    <header>
+        <div class="header-content">
+            <div class="header-content-inner">
+                <table>
+                <tr>
+                    <td>
+                    <h3 style="color:#000000;"><strong>Most - Least likely to cover {{ name }}</strong></h3>
+                    {% for i in ranks %}             
+                    <h3 style="color:{{ i[2] }};">{{ i[1] }}</h3>
+                    {% endfor %}
+                    </td>
+                    <td>
+                        <div class='matplotlib'>
+                            <img src="data:image/png;base64,{{ vplot_url }}">
+                        </div>
+                    </td>
+                </tr>
+                </table>
+            </div>
+        </div>
+    </header>
 
     <header>
         <div class="header-content">

@@ -16,9 +16,9 @@ from format_input import format_input
 #Output functions
 import StringIO
 import base64
-from barplot import barplot
+from volumeplot import volumeplot
 
-#Read in postgres
+#Read in postgres details
 with open('postgres','rb') as f:
     login = []
     for line in f.readlines():
@@ -26,7 +26,20 @@ with open('postgres','rb') as f:
 user,host,pw,dbname = login
 db = create_engine('postgres://%s:%s@%s/%s'%(user,pw,host,dbname))
 
+#Read in counts by network
 con = psycopg2.connect(database = dbname, user = user)
+cur = con.cursor()
+cur.execute('''
+            select sum(huf),
+            sum(fox),
+            sum(ap),
+            sum(reu),
+            sum(was)
+            from gd_mentionsb;
+            ''')
+targetsCnt = dict(zip(['huf','fox','ap','reu','was'],cur.fetchone()))
+cur.close()
+con.close()
 
 #Read in pickled prediction models
 import cPickle
@@ -36,11 +49,13 @@ targetsTrans = {'huf':'HuffingtonPost',
                 'ap':'AssociatedPress', 
                 'reu':'Reuters', 
                 'was':'WashingtonPost'}
+targetsCol = {'huf':'#4878CF', 
+                'fox':'#6ACC65', 
+                'ap':'#D65F5F', 
+                'reu':'#B47CC7', 
+                'was':'#C4AD66'}
 target_m = {}
 files = glob('whch_app/*model.pkl.gz')
-#for f in files:
-#    with gzip.open(f,'rb') as infile:
-#        target_m[f.split('/')[-1].split('_')[0]] = cPickle.load(infile)
 
 
 @app.route('/')
@@ -58,26 +73,33 @@ def fancy_output():
     #new = {}
     #new['[0-9]type'] = 
     print request.args
-    newRows = format_input(db, request.args.get('name').upper(),features)
+    newRows,df_m = format_input(db, request.args.get('name').upper(),features)
     
     if newRows is None:
         return render_template('index.html', error="No results found for {}, try searching something else".format(request.args.get('name')))
     
     preds = []
     targs = []
+    targs_c = []
     for f in files[0:2]:
-        targs.append(targetsTrans[f.split('/')[-1].split('_')[0]])
+        targ = f.split('/')[-1].split('_')[0]
+        targs.append(targetsTrans[targ])
+        targs_c.append(targetsCol[targ])
         with gzip.open(f,'rb') as infile:
             target_m = cPickle.load(infile)
             preds.append(np.mean(target_m.predict_proba(newRows)[:,1]))
+    #Create ranking list
+    ranks = sorted(zip(preds,targs,targs_c),reverse=True)
     
     img = StringIO.StringIO()
-    sns_plot = plt.figure(tight_layout=True)
-    sns_plot = barplot(targs,preds)
-    sns_plot.figure.savefig(img, format='png', transparent=True)
+    vplot = plt.figure(tight_layout=True)
+    vplot = volumeplot(df_m, request.args.get('name'))
+    vplot.figure.savefig(img, format='png', transparent=True)
 
     img.seek(0)
 
-    plot_url = base64.b64encode(img.getvalue())
+    vplot_url = base64.b64encode(img.getvalue())
 
-    return render_template('output.html', plot_url=plot_url, name=request.args.get('name'))
+    return render_template('output.html', vplot_url=vplot_url, 
+                           name=request.args.get('name'),
+                          ranks = ranks)
