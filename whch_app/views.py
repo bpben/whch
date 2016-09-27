@@ -16,8 +16,7 @@ from format_input import format_input
 #Output functions
 import StringIO
 import base64
-from volumeplot import volumeplot
-from toneplot import toneplot
+from plotter import plotter
 
 #Read in postgres details
 with open('postgres','rb') as f:
@@ -93,24 +92,24 @@ def fancy_output():
     ranks = sorted(zip(preds,targs,targs_c),reverse=True)
     
     img = StringIO.StringIO()
-    vplot = plt.figure(tight_layout=True)
-    vplot = volumeplot(df_m, request.args.get('name'))
-    vplot.figure.savefig(img, format='png', transparent=True)
+    #vplot = plt.figure(tight_layout=True)
+    plots = plotter(df_m,request.args.get('name'))
+    plots.savefig(img, format='png', transparent=True)
     
     img.seek(0)
 
     vplot_url = base64.b64encode(img.getvalue())
     
     
-    img = StringIO.StringIO()
-    tplot = plt.figure(tight_layout=True)
-    tplot = toneplot(df_m, request.args.get('name'))
-    tplot.figure.savefig(img, format='png', transparent=True)
+    #img = StringIO.StringIO()
+    #tplot = plt.figure(tight_layout=True)
+    #tplot = toneplot(df_m, request.args.get('name'))
+    #tplot.figure.savefig(img, format='png', transparent=True)
 
-    img.seek(0)
+    #img.seek(0)
 
-    tplot_url = base64.b64encode(img.getvalue())
+    #tplot_url = base64.b64encode(img.getvalue())
 
-    return render_template('output.html', vplot_url=vplot_url, tplot_url=tplot_url, 
+    return render_template('output.html', vplot_url=vplot_url, 
                            name=request.args.get('name'),
                           ranks = ranks)
