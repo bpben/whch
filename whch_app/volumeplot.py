@@ -1,6 +1,5 @@
 
-#Script for making prediction plots
-#Reads in list of prediction, creates dataframes, plots
+#Script for making volume plots
 
 def volumeplot(df_m,new):
     import pandas as pd

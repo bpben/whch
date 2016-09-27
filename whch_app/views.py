@@ -17,6 +17,7 @@ from format_input import format_input
 import StringIO
 import base64
 from volumeplot import volumeplot
+from toneplot import toneplot
 
 #Read in postgres details
 with open('postgres','rb') as f:
@@ -95,11 +96,21 @@ def fancy_output():
     vplot = plt.figure(tight_layout=True)
     vplot = volumeplot(df_m, request.args.get('name'))
     vplot.figure.savefig(img, format='png', transparent=True)
-
+    
     img.seek(0)
 
     vplot_url = base64.b64encode(img.getvalue())
+    
+    
+    img = StringIO.StringIO()
+    tplot = plt.figure(tight_layout=True)
+    tplot = toneplot(df_m, request.args.get('name'))
+    tplot.figure.savefig(img, format='png', transparent=True)
 
-    return render_template('output.html', vplot_url=vplot_url, 
+    img.seek(0)
+
+    tplot_url = base64.b64encode(img.getvalue())
+
+    return render_template('output.html', vplot_url=vplot_url, tplot_url=tplot_url, 
                            name=request.args.get('name'),
                           ranks = ranks)
