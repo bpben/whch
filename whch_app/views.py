@@ -40,7 +40,7 @@ targetsCol = {'huf':'#4878CF',
                 'reu':'#B47CC7', 
                 'was':'#C4AD66'}
 target_m = {}
-files = glob('whch_app/*model.pkl.gz')
+files = glob('whch_app/*model.pkl')
 
 
 @app.route('/')
