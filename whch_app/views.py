@@ -26,21 +26,6 @@ with open('postgres','rb') as f:
 user,host,pw,dbname = login
 db = create_engine('postgres://%s:%s@%s/%s'%(user,pw,host,dbname))
 
-#Read in counts by network
-con = psycopg2.connect(database = dbname, user = user)
-cur = con.cursor()
-cur.execute('''
-            select sum(huf),
-            sum(fox),
-            sum(ap),
-            sum(reu),
-            sum(was)
-            from gd_mentionsb;
-            ''')
-targetsCnt = dict(zip(['huf','fox','ap','reu','was'],cur.fetchone()))
-cur.close()
-con.close()
-
 #Read in pickled prediction models
 import cPickle
 from glob import glob
