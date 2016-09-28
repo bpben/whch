@@ -1,19 +1,12 @@
-
-# coding: utf-8
-
-# In[1]:
-
 #Script for making new observations for prediction
 #Reads in dictionary input, outputs rows of every possible combination for prediction
-from copy import copy
-import itertools
 import cPickle
 import re
 import pandas as pd
-import itertools
-import os
+from datetime import datetime
 
 def format_input(db,new,features):
+    print datetime.now()
     df = pd.read_sql('''
                 SELECT * FROM {} 
                 where 
@@ -35,7 +28,7 @@ def format_input(db,new,features):
                 '''.format('gd_eventsb',new,new,new),db)
         if len(df)==0:
             return(None)
-
+    print 'events done {}'.format(datetime.now())
     df.globaleventid = df.globaleventid.astype('int64')
     eventids = tuple(str(x) for x in df.globaleventid.values)
     
@@ -43,10 +36,10 @@ def format_input(db,new,features):
     df_m = pd.read_sql("""
                 select * from {} 
                 where globaleventid in {}
-                """.format('gd_mentionsb',eventids),db)
- 
+                """.format('mentions_date',eventids),db)
+    print 'mentions done {}'.format(datetime.now())
     #Merge events(date) to mentions
-    df_m = df[['sqldate','globaleventid']].set_index('globaleventid').join(df_m.set_index('globaleventid'), how='right')
+    #df_m = df[['sqldate','globaleventid']].set_index('globaleventid').join(df_m.set_index('globaleventid'), how='right')
     
     #Read in sklearn encoder
     with open('whch_app/sklearn_encoder.pkl','rb') as infile:
@@ -58,7 +51,6 @@ def format_input(db,new,features):
         for i in df.filter(regex=k).columns:
             drops += list(df[~df[i].isin(encodes[k].classes_)].index)
     drops = set(drops)
-    print df.iloc[list(drops)[0]]
     df.drop(list(drops),inplace=True)
     
     #List of colnames, by category
@@ -81,5 +73,6 @@ def format_input(db,new,features):
             else:
                 df[f] = df[f].astype('float64')
                 
-    #predict,visual sets            
+    #predict,visual sets
+    print 'format done {}'.format(datetime.now())
     return(df[features].iloc[0:10],df_m)
