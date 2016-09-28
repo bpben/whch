@@ -32,9 +32,10 @@ def plotter(df_m,new):
         ax2 = df_kde[df_kde[t].notnull()][t].plot(kind='kde', alpha=.7, legend=True,
                                             label=t,xlim=(-10,10))
     ax2.set_axis_bgcolor('w')
-    ax2.set_xlabel('Tone')
+    ax2.set_xlabel('')
     ax2.set_xticklabels(['Negative','','Neutral','','Positive'])
     ax2.set_ylabel('# of stories')
     ax2.set_yticklabels('')
+    ax2.set_title('Tone of stories about '+new)
     
     return(plt.gcf())

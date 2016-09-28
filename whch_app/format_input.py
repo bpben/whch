@@ -35,7 +35,7 @@ def format_input(db,new,features):
                 '''.format('gd_eventsb',new,new,new),db)
         if len(df)==0:
             return(None)
-    
+
     df.globaleventid = df.globaleventid.astype('int64')
     eventids = tuple(str(x) for x in df.globaleventid.values)
     
@@ -58,6 +58,7 @@ def format_input(db,new,features):
         for i in df.filter(regex=k).columns:
             drops += list(df[~df[i].isin(encodes[k].classes_)].index)
     drops = set(drops)
+    print df.iloc[list(drops)[0]]
     df.drop(list(drops),inplace=True)
     
     #List of colnames, by category
@@ -79,6 +80,6 @@ def format_input(db,new,features):
                     df[f] = 0
             else:
                 df[f] = df[f].astype('float64')
-    
+                
     #predict,visual sets            
     return(df[features].iloc[0:10],df_m)

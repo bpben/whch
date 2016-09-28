@@ -72,12 +72,13 @@ def fancy_output():
     
     #new = {}
     #new['[0-9]type'] = 
-    print request.args
-    newRows,df_m = format_input(db, request.args.get('name').upper(),features)
+    print request.args 
+    formatted = format_input(db, request.args.get('name').upper(),features)
     
-    if newRows is None:
+    if formatted is None:
         return render_template('index.html', error="No results found for {}, try searching something else".format(request.args.get('name')))
     
+    newRows,df_m = formatted
     preds = []
     targs = []
     targs_c = []
