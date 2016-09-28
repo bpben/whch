@@ -72,7 +72,8 @@ def fancy_output():
         targ = f.split('/')[-1].split('_')[0]
         targs.append(targetsTrans[targ])
         targs_c.append(targetsCol[targ])
-        target_m = cPickle.load(f)
+        with open(f, 'rb') as infile:
+            target_m = cPickle.load(infile) 
         preds.append(np.mean(target_m.predict_proba(newRows)[:,1]))
     #Create ranking list
     ranks = sorted(zip(preds,targs,targs_c),reverse=True)
