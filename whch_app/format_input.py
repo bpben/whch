@@ -21,11 +21,11 @@ def format_input(db,new,features):
         df = pd.read_sql('''
                 SELECT * FROM {} 
                 where 
-                (actor1geo_fullname like '%{}%' 
+                (actor1geo_fullname ilike '%{}%' 
                 or 
-                actor2geo_fullname like '%{}%'
+                actor2geo_fullname ilike '%{}%'
                 or
-                actiongeo_fullname like '%{}%')
+                actiongeo_fullname ilike '%{}%')
                 order by sqldate desc
                 '''.format('gd_eventsb',new,new,new),db)
         if len(df)==0:
@@ -41,11 +41,11 @@ def format_input(db,new,features):
                 select globaleventid,sqldate,tone,
                         ap, huf, was, fox, reu from {} 
                 where 
-                (actor1geo_fullname like '%{}%' 
+                (actor1geo_fullname ilike '%{}%' 
                 or 
-                actor2geo_fullname like '%{}%'
+                actor2geo_fullname ilike '%{}%'
                 or
-                actiongeo_fullname like '%{}%')
+                actiongeo_fullname ilike '%{}%')
                 """.format('mentions_plus',new,new,new),db)
     else:
         df_m = pd.read_sql("""
