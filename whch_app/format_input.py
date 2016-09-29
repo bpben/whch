@@ -6,6 +6,7 @@ import pandas as pd
 from datetime import datetime
 
 def format_input(db,new,features):
+    location = 0
     print datetime.now()
     df = pd.read_sql('''
                 SELECT * FROM {} 
@@ -15,6 +16,7 @@ def format_input(db,new,features):
                 '''.format('gd_eventsb',new,new),db)
     #If it finds nothing for actor, try location
     if len(df)==0:
+        location = 1
         new = '%{}%'.format(new)
         df = pd.read_sql('''
                 SELECT * FROM {} 
@@ -33,13 +35,30 @@ def format_input(db,new,features):
     eventids = tuple(str(x) for x in df.globaleventid.values)
     
     #Get mentions data
-    df_m = pd.read_sql("""
-                select * from {} 
-                where globaleventid in {}
-                """.format('mentions_date',eventids),db)
+    #Check if search by location
+    if location == 1:
+        df_m = pd.read_sql("""
+                select globaleventid,sqldate,tone,
+                        ap, huf, was, fox, reu from {} 
+                where 
+                (actor1geo_fullname like '%{}%' 
+                or 
+                actor2geo_fullname like '%{}%'
+                or
+                actiongeo_fullname like '%{}%')
+                """.format('mentions_plus',new,new,new),db)
+    else:
+        df_m = pd.read_sql("""
+                select globaleventid,sqldate,tone,
+                        ap, huf, was, fox, reu from {} 
+                where 
+                (actor1name like '{}' or actor2name like '{}')
+                """.format('mentions_plus',new,new),db)
+    #df_m = pd.read_sql("""
+    #            select * from {} 
+    #            where globaleventid in {}
+    #            """.format('mentions_date',eventids),db)
     print 'mentions done {}'.format(datetime.now())
-    #Merge events(date) to mentions
-    #df_m = df[['sqldate','globaleventid']].set_index('globaleventid').join(df_m.set_index('globaleventid'), how='right')
     
     #Read in sklearn encoder
     with open('whch_app/sklearn_encoder.pkl','rb') as infile:

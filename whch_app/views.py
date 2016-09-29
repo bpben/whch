@@ -9,6 +9,7 @@ import numpy as np
 import psycopg2
 import tempfile
 import gzip
+from datetime import datetime
 
 #User parsing functions
 from format_input import format_input
@@ -73,7 +74,7 @@ def fancy_output():
         targs.append(targetsTrans[targ])
         targs_c.append(targetsCol[targ])
         with open(f, 'rb') as infile:
-            target_m = cPickle.load(infile) 
+            target_m = cPickle.load(infile)
         preds.append(np.mean(target_m.predict_proba(newRows)[:,1]))
     #Create ranking list
     ranks = sorted(zip(preds,targs,targs_c),reverse=True)
