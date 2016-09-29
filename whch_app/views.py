@@ -48,6 +48,74 @@ files = glob('whch_app/*model.pkl')
 def test():
     return render_template('index.html')
 
+@app.route('/louisiana')
+def louisiana():
+    features = ['actor1code', 'actor1countrycode', 'actor1knowngroupcode', 'actor1ethniccode', 'actor1religion1code', 'actor1religion2code',
+     'actor1type1code', 'actor1type2code', 'actor1type3code', 'actor2code', 'actor2countrycode', 'actor2knowngroupcode',
+     'actor2ethniccode', 'actor2religion1code', 'actor2religion2code', 'actor2type1code', 'actor2type2code', 'actor2type3code',
+     'isrootevent', 'eventcode', 'eventbasecode', 'eventrootcode', 'actor1geo_countrycode', 'actor2geo_countrycode',
+     'actiongeo_countrycode']
+
+    formatted = format_input(db, '',features,example='LOUISIANA')
+    
+    newRows,df_m = formatted
+    #Pre-defined estimates, for fast example
+    pre_def = ['fox','was','huf','ap','reu']
+    preds = [5,4,3,2,1]
+    targs = []
+    targs_c = []
+    for p in pre_def:
+        targs.append(targetsTrans[p])
+        targs_c.append(targetsCol[p])
+    #Create ranking list
+    ranks = sorted(zip(preds,targs,targs_c),reverse=True)
+    
+    img = StringIO.StringIO()
+    plots = plotter(df_m,'Louisiana')
+    print plots
+    plots.savefig(img, format='png', transparent=True)
+    
+    img.seek(0)
+
+    plot_url = base64.b64encode(img.getvalue())
+    return render_template('output.html', plot_url=plot_url, 
+                           name='Louisiana',
+                          ranks = ranks)
+
+@app.route('/syria')
+def syria():
+    features = ['actor1code', 'actor1countrycode', 'actor1knowngroupcode', 'actor1ethniccode', 'actor1religion1code', 'actor1religion2code',
+     'actor1type1code', 'actor1type2code', 'actor1type3code', 'actor2code', 'actor2countrycode', 'actor2knowngroupcode',
+     'actor2ethniccode', 'actor2religion1code', 'actor2religion2code', 'actor2type1code', 'actor2type2code', 'actor2type3code',
+     'isrootevent', 'eventcode', 'eventbasecode', 'eventrootcode', 'actor1geo_countrycode', 'actor2geo_countrycode',
+     'actiongeo_countrycode']
+
+    formatted = format_input(db, '',features,example='SYRIA')
+    
+    newRows,df_m = formatted
+    #Pre-defined estimates, for fast example
+    pre_def = ['reu','ap','was','huf','fox']
+    preds = [5,4,3,2,1]
+    targs = []
+    targs_c = []
+    for p in pre_def:
+        targs.append(targetsTrans[p])
+        targs_c.append(targetsCol[p])
+    #Create ranking list
+    ranks = sorted(zip(preds,targs,targs_c),reverse=True)
+    
+    img = StringIO.StringIO()
+    plots = plotter(df_m,'Syria')
+    print plots
+    plots.savefig(img, format='png', transparent=True)
+    
+    img.seek(0)
+
+    plot_url = base64.b64encode(img.getvalue())
+    return render_template('output.html', plot_url=plot_url, 
+                           name='Syria',
+                          ranks = ranks)
+
 @app.route('/output')
 def fancy_output():
     features = ['actor1code', 'actor1countrycode', 'actor1knowngroupcode', 'actor1ethniccode', 'actor1religion1code', 'actor1religion2code',

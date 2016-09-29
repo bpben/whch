@@ -5,59 +5,65 @@ import re
 import pandas as pd
 from datetime import datetime
 
-def format_input(db,new,features):
-    location = 0
-    print datetime.now()
-    df = pd.read_sql('''
-                SELECT * FROM {} 
-                where 
-                (actor1name like '{}' or actor2name like '{}')
-                order by sqldate desc
-                '''.format('gd_eventsb',new,new),db)
-    #If it finds nothing for actor, try location
-    if len(df)==0:
-        location = 1
-        new = '%{}%'.format(new)
+def format_input(db,new,features,example=None):
+    if example is not None:
         df = pd.read_sql('''
                 SELECT * FROM {} 
-                where 
-                (actor1geo_fullname ilike '%{}%' 
-                or 
-                actor2geo_fullname ilike '%{}%'
-                or
-                actiongeo_fullname ilike '%{}%')
                 order by sqldate desc
-                '''.format('gd_eventsb',new,new,new),db)
-        if len(df)==0:
-            return(None)
-    print 'events done {}'.format(datetime.now())
-    df.globaleventid = df.globaleventid.astype('int64')
-    eventids = tuple(str(x) for x in df.globaleventid.values)
-    
-    #Get mentions data
-    #Check if search by location
-    if location == 1:
+                '''.format(example.lower()),db)
         df_m = pd.read_sql("""
                 select globaleventid,sqldate,tone,
-                        ap, huf, was, fox, reu from {} 
-                where 
-                (actor1geo_fullname ilike '%{}%' 
-                or 
-                actor2geo_fullname ilike '%{}%'
-                or
-                actiongeo_fullname ilike '%{}%')
-                """.format('mentions_plus',new,new,new),db)
+                            ap, huf, was, fox, reu from {}
+                """.format(example.lower()+'_mention'),db)
+        print len(df_m)
     else:
-        df_m = pd.read_sql("""
-                select globaleventid,sqldate,tone,
-                        ap, huf, was, fox, reu from {} 
-                where 
-                (actor1name like '{}' or actor2name like '{}')
-                """.format('mentions_plus',new,new),db)
-    #df_m = pd.read_sql("""
-    #            select * from {} 
-    #            where globaleventid in {}
-    #            """.format('mentions_date',eventids),db)
+        location = 0
+        df = pd.read_sql('''
+                    SELECT * FROM {} 
+                    where 
+                    (actor1name like '{}' or actor2name like '{}')
+                    order by sqldate desc
+                    '''.format('gd_eventsb',new,new),db)
+        #If it finds nothing for actor, try location
+        if len(df)==0:
+            location = 1
+            new = '%{}%'.format(new)
+            df = pd.read_sql('''
+                    SELECT * FROM {} 
+                    where 
+                    (actor1geo_fullname ilike '%{}%' 
+                    or 
+                    actor2geo_fullname ilike '%{}%'
+                    or
+                    actiongeo_fullname ilike '%{}%')
+                    order by sqldate desc
+                    '''.format('gd_eventsb',new,new,new),db)
+            if len(df)==0:
+                return(None)
+        print 'events done {}'.format(datetime.now())
+        df.globaleventid = df.globaleventid.astype('int64')
+        eventids = tuple(str(x) for x in df.globaleventid.values)
+
+        #Get mentions data
+        #Check if search by location
+        if location == 1:
+            df_m = pd.read_sql("""
+                    select globaleventid,sqldate,tone,
+                            ap, huf, was, fox, reu from {} 
+                    where 
+                    (actor1geo_fullname ilike '%{}%' 
+                    or 
+                    actor2geo_fullname ilike '%{}%'
+                    or
+                    actiongeo_fullname ilike '%{}%')
+                    """.format('mentions_plus',new,new,new),db)
+        else:
+            df_m = pd.read_sql("""
+                    select globaleventid,sqldate,tone,
+                            ap, huf, was, fox, reu from {} 
+                    where 
+                    (actor1name like '{}' or actor2name like '{}')
+                    """.format('mentions_plus',new,new),db)
     print 'mentions done {}'.format(datetime.now())
     
     #Read in sklearn encoder
