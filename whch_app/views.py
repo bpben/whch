@@ -154,7 +154,7 @@ def fancy_output():
     
     img.seek(0)
 
-    vplot_url = base64.b64encode(img.getvalue())
+    plot_url = base64.b64encode(img.getvalue())
     
     
     #img = StringIO.StringIO()
@@ -166,6 +166,6 @@ def fancy_output():
 
     #tplot_url = base64.b64encode(img.getvalue())
 
-    return render_template('output.html', vplot_url=vplot_url, 
+    return render_template('output.html', plot_url=plot_url, 
                            name=request.args.get('name'),
                           ranks = ranks)
