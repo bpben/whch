@@ -3,6 +3,8 @@ from whch_app import app
 from flask import request
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
