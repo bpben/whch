@@ -43,14 +43,14 @@
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">whetherChannel</a>
+                <a class="navbar-brand page-scroll" href="/">whetherChannel</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a class="page-scroll" href="#about">About</a>
+                        <a class="page-scroll" href="#results">Results</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
@@ -63,26 +63,29 @@
     </nav>
     
     <header>
-        <div class="header-content">
-            <div class="header-content-inner">
-                <table>
-                <tr>
-                    <td>
-                    <h3 style="color:#000000;"><strong>Most - Least likely to cover {{ name }}</strong></h3>
-                    {% for i in ranks %}             
-                    <h3 style="color:{{ i[2] }};">{{ i[1] }}</h3>
-                    {% endfor %}
-                    </td>
-                    <td>
-                        <div class='matplotlib'>
-                            <img src="data:image/png;base64,{{ plot_url }}">
-                        </div>
-                    </td>
-                </tr>
-                </table>
+        <section id="results">
+            <div class="header-content">
+                <div class="header-content-inner">
+                    <table>
+                        <tr>
+                            <td>
+                                <h3 style="color:#000000;"><strong>Most - Least likely to cover {{ name }}</strong></h3>
+                                {% for i in ranks %}             
+                                <h3 style="color:{{ i[2] }};">{{ i[1] }}</h3>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <div class='matplotlib'>
+                                    <img src="data:image/png;base64,{{ plot_url }}">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
+        </section>
     </header>
+
 
     <section id="contact">
         <aside class="bg-dark">
@@ -92,12 +95,12 @@
                         <hr class="primary">
                     </div>
                     <div class="col-lg-4 col-lg-offset-2 text-center">
-                        <i class="fa fa-phone fa-3x sr-contact"></i>
-                        <p>123-456-6789</p>
+                        <i class="fa fa-github fa-3x sr-contact"></i>
+                        <p><a href='https://github.com/bpben'>github.com/bpben</a></p>
                     </div>
                     <div class="col-lg-4 text-center">
-                        <i class="fa fa-envelope-o fa-3x sr-contact"></i>
-                        <p><a href="mailto:your-email@your-domain.com">feedback@startbootstrap.com</a></p>
+                        <i class="fa fa-linkedin fa-3x sr-contact"></i>
+                        <p><a href="https://www.linkedin.com/in/benjamin-batorsky-1b883b27">Linkedin</a></p>
                 </div>
             </div>
         </aside>
