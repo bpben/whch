@@ -53,6 +53,9 @@
                         <a class="page-scroll" href="#results">Results</a>
                     </li>
                     <li>
+                        <a class="page-scroll" href="#again">Again</a>
+                    </li>
+                    <li>
                         <a class="page-scroll" href="#contact">Contact</a>
                     </li>                
                 </ul>
@@ -69,7 +72,7 @@
                     <table>
                         <tr>
                             <td>
-                                <h3 style="color:#000000;"><strong>Most - Least likely to cover {{ name }}</strong></h3>
+                                <h3 style="color:#000000;"><strong>News outlets Most - Least likely to cover {{ name }}</strong></h3>
                                 {% for i in ranks %}             
                                 <h3 style="color:{{ i[2] }};">{{ i[1] }}</h3>
                                 {% endfor %}
@@ -86,6 +89,24 @@
         </section>
     </header>
 
+    <section id="again">
+        <div class="container">
+            <center>
+                <p style="color:#F05F40;">Search again: Type a group, person or country you're interested in. </p>
+                <form  action="/output" method="GET">
+                    <div class="form-group">
+                        <input style="color:#F05F40;" type="text" id="name" name='name' placeholder="e.g. Hillary Clinton">
+                    </div>
+                    {% if error %}
+                    <p style="color:#F05F40;" class=error><strong>Error:</strong> {{ error }}
+                        {% endif %}
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-xl page-scroll">Predict</button>
+                    </div>
+                </form>
+            </center>
+        </div>
+    </section>
 
     <section id="contact">
         <aside class="bg-dark">
@@ -100,7 +121,7 @@
                     </div>
                     <div class="col-lg-4 text-center">
                         <i class="fa fa-linkedin fa-3x sr-contact"></i>
-                        <p><a href="https://www.linkedin.com/in/benjamin-batorsky-1b883b27">Linkedin</a></p>
+                        <p><a href="https://www.linkedin.com/in/benjamin-batorsky-1b883b27" target='_top'>Linkedin</a></p>
                 </div>
             </div>
         </aside>
