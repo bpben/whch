@@ -58,9 +58,9 @@ def louisiana():
      'isrootevent', 'eventcode', 'eventbasecode', 'eventrootcode', 'actor1geo_countrycode', 'actor2geo_countrycode',
      'actiongeo_countrycode']
 
-    formatted = format_input(db, '',features,example='LOUISIANA')
+    #formatted = format_input(db, '',features,example='LOUISIANA')
     
-    newRows,df_m = formatted
+    #newRows,df_m = formatted
     #Pre-defined estimates, for fast example
     pre_def = ['fox','was','huf','ap','reu']
     preds = [5,4,3,2,1]
@@ -92,9 +92,9 @@ def syria():
      'isrootevent', 'eventcode', 'eventbasecode', 'eventrootcode', 'actor1geo_countrycode', 'actor2geo_countrycode',
      'actiongeo_countrycode']
 
-    formatted = format_input(db, '',features,example='SYRIA')
+    #formatted = format_input(db, '',features,example='SYRIA')
     
-    newRows,df_m = formatted
+    #newRows,df_m = formatted
     #Pre-defined estimates, for fast example
     pre_def = ['reu','ap','was','huf','fox']
     preds = [5,4,3,2,1]
