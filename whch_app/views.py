@@ -78,7 +78,7 @@ def louisiana():
     #plots.savefig('/Users/B/Documents/whch/louisiana', format='png', transparent=True)
     
     #img.seek(0)
-    with open('/Users/B/Documents/whch/louisiana','rb') as png:
+    with open('louisiana','rb') as png:
         plot_url = base64.b64encode(png.read())
     return render_template('output.html', plot_url=plot_url, 
                            name='Louisiana',
@@ -112,7 +112,7 @@ def syria():
     #plots.savefig('/Users/B/Documents/whch/syria', format='png', transparent=True)
     
     #img.seek(0)
-    with open('/Users/B/Documents/whch/syria','rb') as png:
+    with open('syria','rb') as png:
         plot_url = base64.b64encode(png.read())
     return render_template('output.html', plot_url=plot_url, 
                            name='Syria',
