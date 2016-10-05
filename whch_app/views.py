@@ -72,14 +72,14 @@ def louisiana():
     #Create ranking list
     ranks = sorted(zip(preds,targs,targs_c),reverse=True)
     
-    img = StringIO.StringIO()
-    plots = plotter(df_m,'Louisiana')
-    print plots
-    plots.savefig(img, format='png', transparent=True)
+    #img = StringIO.StringIO()
+    #plots = plotter(df_m,'Louisiana')
+    #print plots
+    #plots.savefig('/Users/B/Documents/whch/louisiana', format='png', transparent=True)
     
-    img.seek(0)
-
-    plot_url = base64.b64encode(img.getvalue())
+    #img.seek(0)
+    with open('/Users/B/Documents/whch/louisiana','rb') as png:
+        plot_url = base64.b64encode(png.read())
     return render_template('output.html', plot_url=plot_url, 
                            name='Louisiana',
                           ranks = ranks)
@@ -106,14 +106,14 @@ def syria():
     #Create ranking list
     ranks = sorted(zip(preds,targs,targs_c),reverse=True)
     
-    img = StringIO.StringIO()
-    plots = plotter(df_m,'Syria')
-    print plots
-    plots.savefig(img, format='png', transparent=True)
+    #img = StringIO.StringIO()
+    #plots = plotter(df_m,'Syria')
+    #print plots
+    #plots.savefig('/Users/B/Documents/whch/syria', format='png', transparent=True)
     
-    img.seek(0)
-
-    plot_url = base64.b64encode(img.getvalue())
+    #img.seek(0)
+    with open('/Users/B/Documents/whch/syria','rb') as png:
+        plot_url = base64.b64encode(png.read())
     return render_template('output.html', plot_url=plot_url, 
                            name='Syria',
                           ranks = ranks)
