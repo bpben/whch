@@ -41,6 +41,7 @@ def format_input(db,new,features,example=None):
             if len(df)==0:
                 return(None)
         print 'events done {}'.format(datetime.now())
+        print df.head()
         df.globaleventid = df.globaleventid.astype('int64')
         eventids = tuple(str(x) for x in df.globaleventid.values)
 

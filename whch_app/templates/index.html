@@ -175,6 +175,31 @@
     <!-- Theme JavaScript -->
     <script src="../static/js/creative.min.js"></script>
 
+    <!-- Bootstrap select  (http://silviomoreto.github.io/bootstrap-select/examples/) -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/i18n/defaults-*.min.js"></script>
+
+    [5:00]  
+    <div class="input-recipe">
+
+        <h1 style="font-size: 40pt"><strong>Find your recipe</strong></h1>
+        <h3>What recipe do you want to see suggestions for?</h3>
+
+
+        <form  action="/search" method="GET" id=recipe_choice_form name=recipe_choice_form type="submit"  value="Submit">
+            <select type="submit" name="recipe_choice" id="recipe_choice" class="selectpicker" title="start typing...." data-live-search="true" mobile="true" data-width="auto" dropupAuto="false" size='1'>
+
+                {% for title in autocomplete_list %}
+                <option>{{title}}</option>
+                {% endfor %}
+
+            </select>
+            <button id=recipe_choice_button name=recipe_choice_button type="submit" class="btn btn-default btn-med" style="color:#002a40 ; font-weight: bold;" value="Submit" >Find!</button>
+        </form>
+
+    </div>
 </body>
 
 </html>

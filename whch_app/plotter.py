@@ -30,7 +30,7 @@ def plotter(df_m,new):
     
     for t in targets:
         ax2 = df_kde[df_kde[t].notnull()][t].plot(kind='kde', alpha=.7, legend=True,
-                                            label=t,xlim=(-10,10))
+                                            label=t)
     ax2.set_axis_bgcolor('w')
     ax2.set_xlabel('')
     ax2.set_xticklabels(['Negative','','Neutral','','Positive'])

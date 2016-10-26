@@ -48,7 +48,12 @@ files = glob('whch_app/*model.pkl')
 
 @app.route('/')
 def test():
-    return render_template('index.html')
+    autolist = set(x[0] for x in pd.read_sql('''
+                SELECT distinct(actor1name) FROM {0}
+                UNION
+                SELECT distinct(actor2name) FROM {0}
+                '''.format('gd_eventsb'),db).values.tolist() if x[0] is not None)
+    return render_template('index.html',autocomplete_list=autolist)
 
 @app.route('/louisiana')
 def louisiana():
